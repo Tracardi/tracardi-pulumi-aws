@@ -1,0 +1,6 @@
+name: tracardi-pulumi-aws
+runtime:
+  name: python
+  options:
+    virtualenv: venv
+description: Tracardi kubernetes deployment
