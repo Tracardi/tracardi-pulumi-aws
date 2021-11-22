@@ -1,8 +1,8 @@
 import pulumi
 import pulumi_aws as aws
+import pulumi_eks as eks
 
 my_ip = '195.210.25.6'
-domain = 'tracardi'
 instance_type = 'r6g.large.elasticsearch'  # r6g.large.search
 number_od_data_nodes = 3
 master_type = 'r6g.large.elasticsearch'
@@ -11,8 +11,11 @@ elastic_version = "7.10"
 current_region = aws.get_region()
 current_caller_identity = aws.get_caller_identity()
 
+config = pulumi.Config()
+domain = "tracardi-es-0001"
+
 tracardi = aws.elasticsearch.Domain(
-    domain,
+    resource_name=domain,
     cluster_config=aws.elasticsearch.DomainClusterConfigArgs(
         instance_type=instance_type,
         instance_count=number_od_data_nodes,
@@ -32,6 +35,9 @@ tracardi = aws.elasticsearch.Domain(
             master_user_password="RISTO@ri100"
         )
     ),
+    domain_endpoint_options=aws.elasticsearch.DomainDomainEndpointOptionsArgs(
+        tls_security_policy='Policy-Min-TLS-1-2-2019-07',
+        enforce_https=True),
     encrypt_at_rest=aws.elasticsearch.DomainEncryptAtRestArgs(enabled=True),
     node_to_node_encryption=aws.elasticsearch.DomainNodeToNodeEncryptionArgs(enabled=True),
     ebs_options=aws.elasticsearch.DomainEbsOptionsArgs(ebs_enabled=True, volume_size=10, volume_type="gp2"),
@@ -55,3 +61,9 @@ tracardi = aws.elasticsearch.Domain(
     }}
     """
 )
+
+# Create an EKS cluster with the default configuration.
+cluster = eks.Cluster('tracardi-cluster')
+
+# Export the cluster's kubeconfig.
+pulumi.export('kubeconfig', cluster.kubeconfig)
