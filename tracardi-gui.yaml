@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tracardi-gui-deployment
+  labels:
+    app: tracardi-gui
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: tracardi-gui
+  template:
+    metadata:
+      labels:
+        app: tracardi-gui
+    spec:
+      containers:
+        - name: tracardi-gui
+          image: tracardi/tracardi-gui
+          ports:
+            - containerPort: 80
+          env:
+            - name: API_URL
+              value: http://192.168.49.2:30086
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tracardi-gui-service
+spec:
+  type: NodePort
+  selector:
+    app: tracardi-gui
+  ports:
+    - protocol: TCP
+      port: 8787
+      targetPort: 80
+      nodePort: 30080

@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tracardi-api-deployment
+  labels:
+    app: tracardi-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: tracardi-api
+  template:
+    metadata:
+      labels:
+        app: tracardi-api
+    spec:
+      containers:
+        - name: tracardi-api
+          image: tracardi/tracardi-api
+          ports:
+            - containerPort: 80
+          env:
+            - name: ELASTIC_HOST
+              value: elasticsearch-service
+            - name: MAX_WORKERS
+              value: "1"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tracardi-api-service
+spec:
+  type: NodePort
+  selector:
+    app: tracardi-api
+  ports:
+    - protocol: TCP
+      port: 8686
+      targetPort: 80
+      nodePort: 30086

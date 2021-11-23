@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+   name: elastic-local-service
+spec:
+   clusterIP: None
+   ports:
+   - protocol: TCP
+     port: 9200
+     targetPort: 9200
+   selector:
+     name:  elastic-local
+   type: ClusterIP
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: elastic-local-service
+subsets:
+  - addresses:
+    - ip: 192.168.1.103
+    ports:
+      - port: 9200
