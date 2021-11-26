@@ -4,6 +4,7 @@ metadata:
   name: tracardi-gui-deployment
   labels:
     app: tracardi-gui
+    tier: frontend
 spec:
   replicas: 3
   selector:
@@ -13,10 +14,12 @@ spec:
     metadata:
       labels:
         app: tracardi-gui
+        tier: frontend
     spec:
       containers:
         - name: tracardi-gui
           image: tracardi/tracardi-gui
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
           env:
