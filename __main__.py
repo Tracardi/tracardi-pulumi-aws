@@ -37,7 +37,7 @@ tracardi = aws.elasticsearch.Domain(
         internal_user_database_enabled=True,
         master_user_options=aws.elasticsearch.DomainAdvancedSecurityOptionsMasterUserOptionsArgs(
             master_user_name="risto",
-            master_user_password="RISTO@ri100"
+            master_user_password="RI100x4kdyf7!^h"  # RISTO@ri100
         )
     ),
     domain_endpoint_options=aws.elasticsearch.DomainDomainEndpointOptionsArgs(
