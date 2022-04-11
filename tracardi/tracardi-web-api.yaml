@@ -19,7 +19,7 @@ spec:
       containers:
         - name: tracardi-web-api
           image: tracardi/tracardi-api
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - name: http
               containerPort: 80
@@ -27,9 +27,15 @@ spec:
             - name: ELASTIC_HOST
               value: elasticsearch-service.elastic.svc.cluster.local
             - name: REDIS_HOST
-              value: redis://redis.redis.svc.cluster.local
+              value: redis://redis-0.redis.redis.svc.cluster.local
+            - name: REDIS_PASSWORD
+              value: efbfe6e6fa7fa2f5d0ad6f266dd9e6fa
+            - name: POSTPONE_DESTINATION_SYNC
+              value: "5"
+            - name: SYNC_PROFILE_TRACKS
+              value: "yes"
             - name: MAX_WORKERS
-              value: 10
+              value: "10"
             - name: EXPOSE_GUI_API
               value: "no"
 ---
