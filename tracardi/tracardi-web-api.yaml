@@ -1,24 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: tracardi-gui-api-deployment
-  namespace: tracardi
+  name: tracardi-web-api-deployment
   labels:
-    app: tracardi-gui-api
-    tier: backend
+    app: tracardi-web-api
+    tier: frontend
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: tracardi-gui-api
+      app: tracardi-web-api
   template:
     metadata:
       labels:
-        app: tracardi-gui-api
-        tier: backend
+        app: tracardi-web-api
+        tier: frontend
     spec:
       containers:
-        - name: tracardi-gui-api
+        - name: tracardi-web-api
           image: tracardi/tracardi-api
           imagePullPolicy: IfNotPresent
           ports:
@@ -26,30 +25,24 @@ spec:
               containerPort: 80
           env:
             - name: ELASTIC_HOST
-              value: elastic-svc-loadbalancer.elastic.svc.cluster.local
+              value: elasticsearch-service.elastic.svc.cluster.local
             - name: REDIS_HOST
-              value: redis://redis-0.redis.redis.svc.cluster.local
+              value: redis://redis.redis.svc.cluster.local
             - name: MAX_WORKERS
               value: 10
             - name: EXPOSE_GUI_API
-              value: "yes"
-            - name: USER_NAME
-              value: admin
-            - name: PASSWORD
-              value: admin
-
+              value: "no"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: tracardi-gui-api-service
-  namespace: tracardi
+  name: tracardi-web-api-service
 spec:
   type: NodePort
   selector:
-    app: tracardi-gui-api
+    app: tracardi-web-api
   ports:
     - protocol: TCP
       port: 8686
       targetPort: http
-      nodePort: 30087
+      nodePort: 30086
