@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: tracardi-gui-api-deployment
+  namespace: tracardi
   labels:
     app: tracardi-gui-api
     tier: backend
@@ -25,16 +26,24 @@ spec:
               containerPort: 80
           env:
             - name: ELASTIC_HOST
-              value: elasticsearch-service
+              value: elasticsearch-service.elastic.svc.cluster.local
+            - name: REDIS_HOST
+              value: redis://redis.redis.svc.cluster.local
             - name: MAX_WORKERS
               value: "1"
             - name: EXPOSE_GUI_API
               value: "yes"
+            - name: USER_NAME
+              value: admin
+            - name: PASSWORD
+              value: admin
+
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: tracardi-gui-api-service
+  namespace: tracardi
 spec:
   type: NodePort
   selector:

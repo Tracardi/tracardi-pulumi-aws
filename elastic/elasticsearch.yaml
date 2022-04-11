@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: elasticsearch-deployment
+  namespace: elastic
   labels:
     app: elasticsearch
 spec:
@@ -30,6 +31,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: elasticsearch-service
+  namespace: elastic
 spec:
   type: NodePort
   selector:

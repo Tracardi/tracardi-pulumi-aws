@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: tracardi-gui-deployment
+  namespace: tracardi
   labels:
     app: tracardi-gui
     tier: frontend
@@ -24,13 +25,14 @@ spec:
             - containerPort: 80
           env:
             - name: API_URL
-              value: http://192.168.49.2:30086
+              value: http://localhost:40749
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: tracardi-gui-service
+  namespace: tracardi
 spec:
   type: NodePort
   selector:
