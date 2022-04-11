@@ -1,0 +1,38 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: local-es-storage
+  namespace: elastic
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
+allowVolumeExpansion: true
+reclaimPolicy: Delete
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: local-es-pv1
+  namespace: elastic
+spec:
+  storageClassName: local-es-storage
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/storage/es/pv1"
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: es-pv1-claim
+  namespace: elastic
+spec:
+  storageClassName: local-es-storage
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi

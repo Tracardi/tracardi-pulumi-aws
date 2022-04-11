@@ -67,10 +67,10 @@ spec:
       name: data
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: "local-storage"
+      storageClassName: "local-redis-storage"
       resources:
         requests:
-          storage: 500Mi
+          storage: 1Gi
 
 ---
 apiVersion: v1

@@ -26,9 +26,9 @@ spec:
               containerPort: 80
           env:
             - name: ELASTIC_HOST
-              value: elasticsearch-service.elastic.svc.cluster.local
+              value: elastic-svc-loadbalancer.elastic.svc.cluster.local
             - name: REDIS_HOST
-              value: redis://redis.redis.svc.cluster.local
+              value: redis://redis-0.redis.redis.svc.cluster.local
             - name: MAX_WORKERS
               value: "1"
             - name: EXPOSE_GUI_API

@@ -1,6 +1,6 @@
 # this setup is based on https://www.containiq.com/post/deploy-redis-cluster-on-kubernetes
 
-kubectl create ns redis
+kubectl apply -f redis-namespace.yaml
 kubectl apply -f redis-storage.yaml
 kubectl apply -n redis -f redis-config.yaml
 kubectl apply -n redis -f redis-statefulset.yaml

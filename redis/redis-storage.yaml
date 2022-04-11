@@ -2,7 +2,7 @@
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: local-storage
+  name: local-redis-storage
 provisioner: kubernetes.io/no-provisioner
 volumeBindingMode: WaitForFirstConsumer
 allowVolumeExpansion: true
@@ -15,13 +15,13 @@ kind: PersistentVolume
 metadata:
   name: local-redis-pv1
 spec:
-  storageClassName: local-storage
+  storageClassName: local-redis-storage
   capacity:
     storage: 2Gi
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/storage/data1"
+    path: "/storage/redis/pv1"
 
 ---
 
@@ -30,13 +30,13 @@ kind: PersistentVolume
 metadata:
   name: local-redis-pv2
 spec:
-  storageClassName: local-storage
+  storageClassName: local-redis-storage
   capacity:
     storage: 2Gi
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/storage/data2"
+    path: "/storage/redis/pv2"
 
 ---
 
@@ -45,10 +45,10 @@ kind: PersistentVolume
 metadata:
   name: local-redis-pv3
 spec:
-  storageClassName: local-storage
+  storageClassName: local-redis-storage
   capacity:
     storage: 2Gi
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/storage/data3"
+    path: "/storage/redis/pv3"

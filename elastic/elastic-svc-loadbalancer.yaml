@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: elastic-svc-loadbalancer
+  namespace: elastic
+spec:
+  selector:
+    app: es-cluster
+  ports:
+  - name: http
+    port: 9200
+    targetPort: 9200
+  type: LoadBalancer
