@@ -22,7 +22,7 @@ spec:
           image: tracardi/tracardi-api
           imagePullPolicy: Always
           ports:
-            - name: http
+            - name: gui-api-port
               containerPort: 80
           env:
             - name: ELASTIC_HOST
@@ -50,14 +50,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: tracardi-gui-api-service
+  name: tracardi-gui-api-lb
   namespace: tracardi
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: tracardi-gui-api
   ports:
     - protocol: TCP
       port: 8686
-      targetPort: http
-      nodePort: 30087
+      targetPort: gui-api-port

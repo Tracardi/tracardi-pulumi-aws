@@ -23,6 +23,7 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
+              name: gui-port
           env:
             - name: API_URL
               value: http://localhost:8686
@@ -31,14 +32,33 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: tracardi-gui-service
+  name: tracardi-gui-lb
   namespace: tracardi
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: tracardi-gui
   ports:
     - protocol: TCP
       port: 8787
-      targetPort: 80
-      nodePort: 30080
+      targetPort: gui-port
+
+#---
+#apiVersion: networking.k8s.io/v1
+#kind: Ingress
+#metadata:
+#  name: tracardi-gui-ingress
+#  namespace: tracardi
+#  annotations:
+#    kubernetes.io/ingress.class: "traefik"
+#spec:
+#  rules:
+#  - http:
+#      paths:
+#      - path: /
+#        pathType: Prefix
+#        backend:
+#          service:
+#            name: tracardi-gui-service
+#            port:
+#              number: 8787
