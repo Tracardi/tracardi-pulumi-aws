@@ -40,7 +40,9 @@ spec:
             - name: EXPOSE_GUI_API
               value: "no"
             - name: LOGGING_LEVEL
-              value: info
+              value: "info"
+            - name: TRACK_DEBUG
+              value: "yes"
 ---
 apiVersion: v1
 kind: Service

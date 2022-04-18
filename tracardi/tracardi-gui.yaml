@@ -20,7 +20,7 @@ spec:
       containers:
         - name: tracardi-gui
           image: tracardi/tracardi-gui
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
               name: gui-port

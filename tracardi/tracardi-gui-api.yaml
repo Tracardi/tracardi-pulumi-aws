@@ -44,7 +44,9 @@ spec:
             - name: PASSWORD
               value: admin
             - name: LOGGING_LEVEL
-              value: info
+              value: "info"
+            - name: TRACK_DEBUG
+              value: "yes"
 
 ---
 apiVersion: v1
