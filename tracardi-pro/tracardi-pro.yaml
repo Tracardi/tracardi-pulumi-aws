@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tracardi-pro-deployment
+  namespace: tracardi-pro
+  labels:
+    app: tracardi-pro
+    tier: backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: tracardi-pro
+  template:
+    metadata:
+      labels:
+        app: tracardi-pro
+        tier: backend
+    spec:
+      containers:
+        - name: tracardi-pro
+          image: tracardi/pro
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 50000
+              name: grpc-pro-port
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tracardi-pro-lb
+  namespace: tracardi-pro
+spec:
+  type: LoadBalancer
+  selector:
+    app: tracardi-pro
+  ports:
+    - protocol: TCP
+      port: 50000
+      targetPort: grpc-pro-port

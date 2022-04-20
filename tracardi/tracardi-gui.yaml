@@ -24,9 +24,6 @@ spec:
           ports:
             - containerPort: 80
               name: gui-port
-          env:
-            - name: API_URL
-              value: http://localhost:8686
 
 ---
 apiVersion: v1

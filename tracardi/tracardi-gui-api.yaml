@@ -47,6 +47,8 @@ spec:
               value: "info"
             - name: TRACK_DEBUG
               value: "yes"
+            - name: TRACARDI_PRO_HOST
+              value: "192.168.1.128"
 
 ---
 apiVersion: v1
