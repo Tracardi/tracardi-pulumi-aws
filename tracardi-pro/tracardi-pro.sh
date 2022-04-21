@@ -4,3 +4,6 @@
 
 kubectl apply -f tracardi-pro-namespace.yaml
 kubectl apply -f tracardi-pro.yaml -n tracardi-pro
+kubectl apply -f tracardi-pro-scheduler.yaml -n tracardi-pro
+kubectl apply -f tracardi-schedule-server.yaml -n tracardi-pro
+kubectl apply -f tracardi-schedule-worker.yaml -n tracardi-pro

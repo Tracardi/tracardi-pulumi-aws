@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tracardi-schedule-server-deployment
+  namespace: tracardi-pro
+  labels:
+    app: tracardi-schedule-server
+    tier: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tracardi-schedule-server
+  template:
+    metadata:
+      labels:
+        app: tracardi-schedule-server
+        tier: backend
+    spec:
+      containers:
+        - name: tracardi-schedule-server
+          image: tracardi/schedule-server
+          imagePullPolicy: Always
+          env:
+            - name: INTERVAL
+              value: "10"
+            - name: REDIS_HOST
+              value: redis-0.redis.redis.svc.cluster.local
+            - name: REDIS_PASSWORD
+              value: efbfe6e6fa7fa2f5d0ad6f266dd9e6fa
+            - name: REDIS_PORT
+              value: "6379"
+

@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tracardi-pro-scheduler-deployment
+  namespace: tracardi-pro
+  labels:
+    app: tracardi-pro-scheduler
+    tier: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tracardi-pro-scheduler
+  template:
+    metadata:
+      labels:
+        app: tracardi-pro-scheduler
+        tier: backend
+    spec:
+      containers:
+        - name: tracardi-pro-scheduler
+          image: tracardi/pro-scheduler
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 50001
+              name: scheduler-port
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tracardi-pro-scheduler-lb
+  namespace: tracardi-pro
+spec:
+  type: LoadBalancer
+  selector:
+    app: tracardi-pro-scheduler
+  ports:
+    - protocol: TCP
+      port: 50001
+      targetPort: scheduler-port
