@@ -24,6 +24,13 @@ spec:
           ports:
             - containerPort: 50001
               name: scheduler-port
+          env:
+            - name: REDIS_HOST
+              value: redis-0.redis.redis.svc.cluster.local
+            - name: REDIS_PASSWORD
+              value: efbfe6e6fa7fa2f5d0ad6f266dd9e6fa
+            - name: REDIS_PORT
+              value: "6379"
 
 ---
 apiVersion: v1
