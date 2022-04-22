@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: xxx
+  name: xxx
+spec:
+  replicas: ${xxx-database-replica-count}
+  selector:
+    matchLabels:
+      io.service: xxx
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        io.service: xxx
+    spec:
+      containers:
+        - env:
+            - name: POSTGRES_DB
+              value: xxx
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-auth
+                  key: db-auth-password
+                  optional: false
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db-auth
+                  key: db-auth-username
+                  optional: false
+          image: ${REG_URL}/hub/library/postgres:${postgres-version}
+          name: xxx
+          ports:
+            - containerPort: 5432
+          resources:
+            limits:
+              cpu: ${xxx-database-cpu-limit}
+              memory: ${xxx-database-memory-limit}
+            requests:
+              cpu: ${xxx-database-cpu-request}
+              memory: ${xxx-database-memory-request}
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: db-volume
+      restartPolicy: Always
+      volumes:
+        - name: db-volume
+          persistentVolumeClaim:
+            claimName: db-volume
+status: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    io.service: xxx
+  name: xxx
+spec:
+  ports:
+    - name: "5432"
+      port: 5432
+      targetPort: 5432
+  selector:
+    io.service: xxx
+status:
+  loadBalancer: {}
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    io.service: db-volume
+  name: db-volume
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+status: {}
