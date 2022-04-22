@@ -39,10 +39,6 @@ spec:
               value: "10"
             - name: EXPOSE_GUI_API
               value: "yes"
-            - name: USER_NAME
-              value: admin
-            - name: PASSWORD
-              value: admin
             - name: LOGGING_LEVEL
               value: "info"
             - name: TRACK_DEBUG
