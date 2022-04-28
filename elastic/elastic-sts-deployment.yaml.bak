@@ -12,6 +12,8 @@ data:
     discovery.zen.minimum_master_nodes: 1
     xpack.security.enabled: false
     xpack.monitoring.enabled: false
+#    path.repo: ["/usr/share/elasticsearch/data/snapshot"]
+    reindex.remote.whitelist: [192.168.1.127:9200]
   ES_JAVA_OPTS: -Xms512m -Xmx512m
 ---
 apiVersion: apps/v1
@@ -40,14 +42,7 @@ spec:
         imagePullPolicy: IfNotPresent
         securityContext:
           privileged: true
-        command: [ "/bin/sh", "-c" ]
-        args:
-          - |
-            sysctl -w vm.max_map_count=262144
-            chmod 775 /usr/share/elasticsearch/data
-        volumeMounts:
-          - name: elasticsearch-data
-            mountPath: /usr/share/elasticsearch/data
+        command: ["sysctl", "-w", "vm.max_map_count=262144"]
       containers:
       - name: elasticsearch
         resources:

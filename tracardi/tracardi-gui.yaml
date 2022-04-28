@@ -29,10 +29,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: tracardi-gui-lb
+  name: tracardi-gui-nodeport
   namespace: tracardi
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: tracardi-gui
   ports:

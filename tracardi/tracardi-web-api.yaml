@@ -26,7 +26,7 @@ spec:
               containerPort: 80
           env:
             - name: ELASTIC_HOST
-              value: elastic-svc-loadbalancer.elastic.svc.cluster.local
+              value: elastic-svc-nodeport.elastic.svc.cluster.local
             - name: REDIS_HOST
               value: redis://redis-0.redis.redis.svc.cluster.local
             - name: REDIS_PASSWORD
@@ -49,7 +49,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: tracardi-web-api-service
+  name: tracardi-web-api-nodeport
   namespace: tracardi
 spec:
   type: NodePort
@@ -60,22 +60,3 @@ spec:
       port: 8888
       targetPort: web-api-port
 
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: tracardi-gui-ingress
-  namespace: tracardi
-  annotations:
-    kubernetes.io/ingress.class: "traefik"
-spec:
-  rules:
-  - http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: tracardi-web-api-service
-            port:
-              number: 8888

@@ -26,7 +26,7 @@ spec:
               containerPort: 80
           env:
             - name: ELASTIC_HOST
-              value: elastic-svc-loadbalancer.elastic.svc.cluster.local
+              value: elastic-svc-nodeport.elastic.svc.cluster.local
             - name: REDIS_HOST
               value: redis://redis-0.redis.redis.svc.cluster.local
             - name: REDIS_PASSWORD
@@ -44,16 +44,16 @@ spec:
             - name: TRACK_DEBUG
               value: "yes"
             - name: TRACARDI_PRO_HOST
-              value: "192.168.1.127"
+              value: "192.168.1.190"
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: tracardi-gui-api-lb
+  name: tracardi-gui-api-nodeport
   namespace: tracardi
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: tracardi-gui-api
   ports:
