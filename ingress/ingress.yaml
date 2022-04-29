@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: tracardi-web-api-ingress
+  namespace: tracardi
+spec:
+  rules:
+  - host: demo.tracardi.com
+    http:
+        paths:
+        - pathType: Prefix
+          path: "/"
+          backend:
+            service:
+              name: tracardi-web-api-svc
+              port:
+                number: 8585

@@ -1,19 +1,19 @@
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: tracardi-gui-api-ingress
-  namespace: tracardi
-  annotations:
-    kubernetes.io/ingress.class: "traefik"
-spec:
-  rules:
-  - http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: tracardi-web-api-nodeport
-            port:
-              number: 8888
+#---
+#apiVersion: networking.k8s.io/v1
+#kind: Ingress
+#metadata:
+#  name: tracardi-gui-api-ingress
+#  namespace: tracardi
+#  annotations:
+#    kubernetes.io/ingress.class: "traefik"
+#spec:
+#  rules:
+#  - http:
+#      paths:
+#      - path: /
+#        pathType: Prefix
+#        backend:
+#          service:
+#            name: tracardi-web-api-svc
+#            port:
+#              number: 8888

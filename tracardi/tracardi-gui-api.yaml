@@ -50,10 +50,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: tracardi-gui-api-nodeport
+  name: tracardi-gui-api-svc
   namespace: tracardi
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: tracardi-gui-api
   ports:

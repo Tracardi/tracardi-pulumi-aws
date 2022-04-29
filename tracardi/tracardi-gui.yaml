@@ -29,10 +29,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: tracardi-gui-nodeport
+  name: tracardi-gui-svc
   namespace: tracardi
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: tracardi-gui
   ports:
@@ -40,22 +40,19 @@ spec:
       port: 8787
       targetPort: gui-port
 
-#---
-#apiVersion: networking.k8s.io/v1
-#kind: Ingress
-#metadata:
-#  name: tracardi-gui-ingress
-#  namespace: tracardi
-#  annotations:
-#    kubernetes.io/ingress.class: "traefik"
-#spec:
-#  rules:
-#  - http:
-#      paths:
-#      - path: /
-#        pathType: Prefix
-#        backend:
-#          service:
-#            name: tracardi-gui-service
-#            port:
-#              number: 8787
+---
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tracardi-gui-lb
+  namespace: tracardi
+spec:
+  type: LoadBalancer
+  selector:
+    app: tracardi-gui
+  ports:
+    - protocol: TCP
+      port: 8787
+      targetPort: gui-port
+
