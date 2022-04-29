@@ -1,0 +1,21 @@
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+metadata:
+  name: es-cluster
+  namespace: elastic
+spec:
+  version: 7.10.1
+  nodeSets:
+    - name: default
+      count: 3
+      volumeClaimTemplates:
+        - metadata:
+            name: elasticsearch-data # Do not change this name unless you set up a volume mount for the data path.
+          spec:
+            accessModes:
+              - ReadWriteOnce
+            resources:
+              requests:
+                storage: 5Gi
+      config:
+        node.store.allow_mmap: false

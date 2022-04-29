@@ -10,7 +10,7 @@ data:
     bootstrap.memory_lock: false
     discovery.zen.ping.unicast.hosts: elastic-svc-cluster
     discovery.zen.minimum_master_nodes: 1
-    xpack.security.enabled: false
+    xpack.security.enabled: true
     xpack.monitoring.enabled: false
   ES_JAVA_OPTS: -Xms512m -Xmx512m
 ---
@@ -44,6 +44,7 @@ spec:
         args:
           - |
             sysctl -w vm.max_map_count=262144
+            ulimit -u 65535
             chmod 775 /usr/share/elasticsearch/data
         volumeMounts:
           - name: elasticsearch-data
@@ -52,7 +53,7 @@ spec:
       - name: elasticsearch
         resources:
             requests:
-                memory: 1Gi
+                memory: 2Gi
         securityContext:
           privileged: true
           runAsUser: 1000
@@ -74,7 +75,7 @@ spec:
             scheme: HTTP
             path: /_cluster/health?local=true
             port: 9200
-          initialDelaySeconds: 5
+          initialDelaySeconds: 15
         ports:
         - containerPort: 9200
           name: es-http
