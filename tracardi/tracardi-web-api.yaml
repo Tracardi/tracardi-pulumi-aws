@@ -25,8 +25,22 @@ spec:
             - name: web-api-port
               containerPort: 80
           env:
+            - name: ELASTIC_SCHEME
+              value: "https"
             - name: ELASTIC_HOST
-              value: elastic-svc-nodeport.elastic.svc.cluster.local
+              value:  es-cluster-es-http.elastic.svc.cluster.local
+            - name: ELASTIC_HTTP_AUTH_USERNAME
+              value: elastic
+            - name: ELASTIC_HTTP_AUTH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: es-cluster-es-elastic-user
+                  key: elastic
+                  optional: false
+            - name: ELASTIC_PORT
+              value: "9200"
+            - name: ELASTIC_VERIFY_CERTS
+              value: "no"
             - name: REDIS_HOST
               value: redis://redis-0.redis.redis.svc.cluster.local
             - name: REDIS_PASSWORD
