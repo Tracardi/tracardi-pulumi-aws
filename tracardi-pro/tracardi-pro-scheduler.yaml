@@ -21,6 +21,11 @@ spec:
         - name: tracardi-pro-scheduler
           image: tracardi/pro-scheduler
           imagePullPolicy: Always
+#          livenessProbe:
+#            grpc:
+#              port: 50001
+#            initialDelaySeconds: 30
+#            periodSeconds: 60
           ports:
             - containerPort: 50001
               name: scheduler-port
