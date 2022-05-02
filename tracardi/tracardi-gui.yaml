@@ -41,7 +41,6 @@ spec:
       targetPort: gui-port
 
 ---
----
 apiVersion: v1
 kind: Service
 metadata:

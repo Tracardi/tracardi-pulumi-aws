@@ -74,3 +74,18 @@ spec:
       port: 8585
       targetPort: web-api-port
 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tracardi-web-api-lb
+  namespace: tracardi
+spec:
+  type: LoadBalancer
+  selector:
+    app: tracardi-web-api
+  ports:
+    - protocol: TCP
+      port: 8585
+      targetPort: web-api-port
+
