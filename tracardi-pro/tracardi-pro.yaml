@@ -7,7 +7,7 @@ metadata:
     app: tracardi-pro
     tier: backend
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: tracardi-pro
@@ -24,6 +24,13 @@ spec:
           ports:
             - containerPort: 50000
               name: grpc-pro-port
+          env:
+            - name: REDIS_HOST
+              value: redis-0.redis.redis.svc.cluster.local
+            - name: REDIS_PASSWORD
+              value: efbfe6e6fa7fa2f5d0ad6f266dd9e6fa
+            - name: REDIS_PORT
+              value: "6379"
 
 ---
 apiVersion: v1
