@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tracardi-worker-deployment
+  namespace: tracardi-worker
+  labels:
+    app: tracardi-worker
+    tier: backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: tracardi-worker
+  template:
+    metadata:
+      labels:
+        app: tracardi-worker
+        tier: backend
+    spec:
+      containers:
+        - name: tracardi-worker
+          image: tracardi/worker
+          imagePullPolicy: Always
+          env:
+            - name: REDIS_HOST
+              value: redis-0.redis.redis.svc.cluster.local
+            - name: REDIS_PASSWORD
+              value: efbfe6e6fa7fa2f5d0ad6f266dd9e6fa
+            - name: REDIS_PORT
+              value: "6379"
+
