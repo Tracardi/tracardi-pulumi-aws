@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tracardi-web-api-deployment
+  namespace: tracardi
+  labels:
+    app: tracardi-web-api
+    tier: frontend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: tracardi-web-api
+  template:
+    metadata:
+      labels:
+        app: tracardi-web-api
+        tier: backend
+    spec:
+      containers:
+        - name: tracardi-web-api
+          image: tracardi/tracardi-api
+          imagePullPolicy: Always
+          ports:
+            - name: web-api-port
+              containerPort: 80
+          env:
+            - name: ELASTIC_HOST
+              value: elastic-svc-nodeport.elastic.svc.cluster.local
+            - name: ELASTIC_PORT
+              value: "9200"
+            - name: ELASTIC_VERIFY_CERTS
+              value: "no"
+            - name: REDIS_HOST
+              value: redis://redis-0.redis.redis.svc.cluster.local
+            - name: REDIS_PASSWORD
+              value: efbfe6e6fa7fa2f5d0ad6f266dd9e6fa
+            - name: POSTPONE_DESTINATION_SYNC
+              value: "5"
+            - name: SYNC_PROFILE_TRACKS
+              value: "yes"
+            - name: MAX_WORKERS
+              value: "20"
+            - name: EXPOSE_GUI_API
+              value: "no"
+            - name: LOGGING_LEVEL
+              value: "info"
+            - name: TRACK_DEBUG
+              value: "yes"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tracardi-web-api-svc
+  namespace: tracardi
+spec:
+  type: ClusterIP
+  selector:
+    app: tracardi-web-api
+  ports:
+    - protocol: TCP
+      port: 8484
+      targetPort: web-api-port
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tracardi-web-api-lb
+  namespace: tracardi
+spec:
+  type: LoadBalancer
+  selector:
+    app: tracardi-web-api
+  ports:
+    - protocol: TCP
+      port: 8585
+      targetPort: web-api-port
+

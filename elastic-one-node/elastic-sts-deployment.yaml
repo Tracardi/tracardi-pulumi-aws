@@ -10,7 +10,7 @@ data:
     bootstrap.memory_lock: false
     discovery.zen.ping.unicast.hosts: elastic-svc-cluster
     discovery.zen.minimum_master_nodes: 1
-    xpack.security.enabled: true
+    xpack.security.enabled: false
     xpack.monitoring.enabled: false
   ES_JAVA_OPTS: -Xms512m -Xmx512m
 ---

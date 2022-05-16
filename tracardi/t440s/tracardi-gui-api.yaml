@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tracardi-gui-api-deployment
+  namespace: tracardi
+  labels:
+    app: tracardi-gui-api
+    tier: backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: tracardi-gui-api
+  template:
+    metadata:
+      labels:
+        app: tracardi-gui-api
+        tier: backend
+    spec:
+      containers:
+        - name: tracardi-gui-api
+          image: tracardi/tracardi-api
+          imagePullPolicy: Always
+          ports:
+            - name: gui-api-port
+              containerPort: 80
+          livenessProbe:
+            httpGet:
+              path: /healthcheck
+              port: 80
+            initialDelaySeconds: 30
+            periodSeconds: 60
+          env:
+            - name: ELASTIC_HOST
+              value: elastic-svc-nodeport.elastic.svc.cluster.local
+            - name: ELASTIC_PORT
+              value: "9200"
+            - name: ELASTIC_VERIFY_CERTS
+              value: "no"
+            - name: REDIS_HOST
+              value: redis://redis-0.redis.redis.svc.cluster.local
+            - name: REDIS_PASSWORD
+              value: efbfe6e6fa7fa2f5d0ad6f266dd9e6fa
+            - name: POSTPONE_DESTINATION_SYNC
+              value: "5"
+            - name: SYNC_PROFILE_TRACKS
+              value: "yes"
+            - name: MAX_WORKERS
+              value: "10"
+            - name: EXPOSE_GUI_API
+              value: "yes"
+            - name: LOGGING_LEVEL
+              value: "info"
+            - name: TRACK_DEBUG
+              value: "yes"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tracardi-gui-api-svc
+  namespace: tracardi
+spec:
+  type: ClusterIP
+  selector:
+    app: tracardi-gui-api
+  ports:
+    - protocol: TCP
+      port: 8686
+      targetPort: gui-api-port
