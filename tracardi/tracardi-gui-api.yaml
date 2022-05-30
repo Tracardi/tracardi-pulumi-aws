@@ -78,3 +78,19 @@ spec:
     - protocol: TCP
       port: 8686
       targetPort: gui-api-port
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tracardi-gui-api-lb
+  namespace: tracardi
+spec:
+  type: LoadBalancer
+  selector:
+    app: tracardi-gui-api
+  ports:
+    - protocol: TCP
+      port: 8686
+      targetPort: gui-api-port

@@ -54,7 +54,7 @@ spec:
             - name: EXPOSE_GUI_API
               value: "no"
             - name: LOGGING_LEVEL
-              value: "info"
+              value: "warn"
             - name: TRACK_DEBUG
               value: "yes"
 ---
