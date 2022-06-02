@@ -4,18 +4,59 @@ metadata:
   name: es-cluster
   namespace: elastic
 spec:
-  version: 7.10.1
+  version: 8.2.2
   nodeSets:
-    - name: default
-      count: 3
+    - name: master-node
+      count: 1
+      config:
+        node.roles: [ "master" ]
       volumeClaimTemplates:
         - metadata:
-            name: elasticsearch-data # Do not change this name unless you set up a volume mount for the data path.
+            name: elasticsearch-data
           spec:
             accessModes:
               - ReadWriteOnce
             resources:
               requests:
                 storage: 5Gi
+      podTemplate:
+        spec:
+          initContainers:
+            - name: sysctl
+              securityContext:
+                privileged: true
+                runAsUser: 0
+              command: [ 'sh', '-c', 'sysctl -w vm.max_map_count=262144' ]
+      #          containers:
+      #            - name: elasticsearch
+      #              env:
+      #                - name: ES_JAVA_OPTS
+      #                  value: "-Xms3g -Xmx3g"
+      #              resources:
+      #                requests:
+      #                  memory: 4Gi
+      #                  cpu: 4
+      #                limits:
+      #                  memory: 4Gi
+    - name: data-node
+      count: 3
       config:
-        node.store.allow_mmap: false
+        node.roles: [ "data" ]
+      volumeClaimTemplates:
+        - metadata:
+            name: elasticsearch-data
+          spec:
+            accessModes:
+              - ReadWriteOnce
+            resources:
+              requests:
+                storage: 5Gi
+      podTemplate:
+        spec:
+          initContainers:
+            - name: sysctl
+              securityContext:
+                privileged: true
+                runAsUser: 0
+              command: [ 'sh', '-c', 'sysctl -w vm.max_map_count=262144' ]
+

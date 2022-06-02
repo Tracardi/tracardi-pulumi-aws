@@ -7,7 +7,7 @@ metadata:
     app: tracardi-gui-api
     tier: backend
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: tracardi-gui-api
