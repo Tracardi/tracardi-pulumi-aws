@@ -2,9 +2,9 @@ apiVersion: kibana.k8s.elastic.co/v1
 kind: Kibana
 metadata:
   name: kb-cluster
-  namespace: elastic
+  namespace: kibana
 spec:
-  version: 7.10.1
+  version: 8.2.2
   count: 1
   elasticsearchRef:
     name: es-cluster

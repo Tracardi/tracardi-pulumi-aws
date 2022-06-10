@@ -2,7 +2,7 @@
 
 kubectl create -f https://download.elastic.co/downloads/eck/2.1.0/crds.yaml
 kubectl apply -f https://download.elastic.co/downloads/eck/2.1.0/operator.yaml
-kubectl delete -f kb-cluster.yaml -n elastic
+kubectl delete -f kb-cluster.yaml -n kibana
 
 kubectl get secret es-cluster-es-elastic-user -n elastic -o=jsonpath='{.data.elastic}' | base64 --decode; echo
 
