@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tracardi-bridge-mqtt-deployment
+  namespace: bridge-mqtt
+  labels:
+    app: tracardi-bridge-mqtt
+    tier: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tracardi-bridge-mqtt
+  template:
+    metadata:
+      labels:
+        app: tracardi-bridge-mqtt
+        tier: backend
+    spec:
+      containers:
+        - name: tracardi-bridge-mqtt
+          image: tracardi/bridge-mqtt
+          imagePullPolicy: Always
+          ports:
+            - name: mqtt-api-port
+              containerPort: 10001
+          env:
+            - name: TRACARDI_SOURCE
+              value: "e66ab915-5a7a-4da6-8411-2310cc92ae96"
+            - name: ELASTIC_SCHEME
+              value: "https"
+            - name: ELASTIC_HOST
+              value:  es-cluster-es-http.elastic.svc.cluster.local
+            - name: ELASTIC_HTTP_AUTH_USERNAME
+              value: elastic
+            - name: ELASTIC_HTTP_AUTH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: es-cluster-es-elastic-user
+                  key: elastic
+                  optional: false
+            - name: ELASTIC_PORT
+              value: "9200"
+            - name: ELASTIC_VERIFY_CERTS
+              value: "no"
+            - name: MQTT_HOST
+              value: "192.168.1.123"
+            - name: MQTT_USERNAME
+              value: "risto"
+            - name: MQTT_PASSWORD
+              value: "STrych12345"
+            - name: TRACARDI_API_HOST
+              value: http://tracardi-gui-api-svc.tracardi.svc.cluster.local:8686
+#            - name: TRACARDI_EVENT_TYPE
+#              value: "mqtt-event"
+            - name: MQTT_TOPICS_SUB
+              value: cmnd/#,stat/#,ping/#,ble/#,tele/#
+
