@@ -1,0 +1,115 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-conf
+  namespace: netbird
+data:
+  echoserver.conf: |
+    upstream tracardi {
+      server tracardi-gui-api-svc.tracardi:8686; # Kubernetes service name and port
+      keepalive 1024;
+    }
+
+    server {
+      listen 8686 default_server;
+      location / {
+        proxy_pass http://tracardi/;
+        proxy_http_version 1.1;
+      }
+    }
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: netbird-conf
+data:
+  config.json: |
+    {
+        "PrivateKey": "kAwZANfJD8BVAA2DtlKXYjA6yZmdoR8+pwq+5tpXFF8=",
+        "PreSharedKey": "",
+        "ManagementURL": {
+            "Scheme": "https",
+            "Opaque": "",
+            "User": null,
+            "Host": "api.wiretrustee.com:33073",
+            "Path": "",
+            "RawPath": "",
+            "ForceQuery": false,
+            "RawQuery": "",
+            "Fragment": "",
+            "RawFragment": ""
+        },
+        "AdminURL": {
+            "Scheme": "https",
+            "Opaque": "",
+            "User": null,
+            "Host": "app.netbird.io",
+            "Path": "",
+            "RawPath": "",
+            "ForceQuery": false,
+            "RawQuery": "",
+            "Fragment": "",
+            "RawFragment": ""
+        },
+        "WgIface": "wt0",
+        "IFaceBlackList": [
+            "wt0",
+            "tun0",
+            "zt",
+            "ZeroTier",
+            "utun",
+            "wg",
+            "ts",
+            "Tailscale",
+            "tailscale"
+        ],
+        "SSHKey": "-----BEGIN PRIVATE KEY-----\nMC4CAQAwBQYDK2VwBCIEIG/HbARHWx9vhTnJqrDYEBcTafmOSIh7F7wi/6re88lC\n-----END PRIVATE KEY-----\n"
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-netbird
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-netbird
+  template:
+    metadata:
+      labels:
+        app: nginx-netbird
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:alpine
+          volumeMounts:
+            - mountPath: /etc/nginx/conf.d
+              readOnly: true
+              name: nginx-conf
+
+        - name: netbird
+          image: netbirdio/netbird:latest
+          securityContext:
+            capabilities:
+              add:
+                - NET_ADMIN
+          volumeMounts:
+            - mountPath: /etc/netbird
+              readOnly: true
+              name: netbird-conf
+
+      volumes:
+        - name: nginx-conf
+          configMap:
+            name: nginx-conf
+            items:
+              - key: echoserver.conf
+                path: echoserver.conf
+        - name: netbird-conf
+          configMap:
+            name: netbird-conf
+            items:
+              - key: config.json
+                path: config.json
