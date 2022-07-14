@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: tracardi-gui-api
-          image: tracardi/tracardi-api
+          image: tracardi/tracardi-api:0.7.0
           imagePullPolicy: Always
           ports:
             - name: gui-api-port
