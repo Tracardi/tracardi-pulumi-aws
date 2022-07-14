@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: tracardi-worker
-          image: tracardi/worker
+          image: tracardi/worker:0.7.0
           imagePullPolicy: Always
           env:
             - name: REDIS_HOST
